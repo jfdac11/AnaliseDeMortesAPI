@@ -1,15 +1,9 @@
-import os
 from fastapi import FastAPI
 from typing import List, Optional
-import motor.motor_asyncio
-from dotenv import load_dotenv
 from models.declaracao_obito import DeclaracaoObitoModel
-
-load_dotenv('./.env')
+from config.conexao_bd import db
 
 app = FastAPI()
-client = motor.motor_asyncio.AsyncIOMotorClient(os.environ["MONGODB_URL"])
-db = client.deathDB
 
 
 @app.get(
