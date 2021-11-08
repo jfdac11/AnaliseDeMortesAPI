@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from typing import List, Optional
-from models.declaracao_obito import DeclaracaoObitoModel
+from modelos.declaracao_obito import DeclaracaoObitoModel
 from config.conexao_bd import db
 
 app = FastAPI()

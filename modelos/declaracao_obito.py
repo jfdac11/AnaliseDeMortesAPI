@@ -1,7 +1,7 @@
 from typing import Optional
 from bson.objectid import ObjectId
 from pydantic import BaseModel, Field
-from models.py_object_id import PyObjectId
+from modelos.py_object_id import PyObjectId
 
 
 class DeclaracaoObitoModel(BaseModel):
