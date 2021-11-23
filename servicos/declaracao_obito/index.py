@@ -28,3 +28,27 @@ class ServicoDeclaracaoObito(metaclass=SingletonMeta):
         ]
         grafico = await adapter.gerar_grafico(ano, pipeline)
         return grafico
+
+    async def listar_doencas_letais(self, ano: str, quantidade: int, tipo_grafico: str):
+        factory = InterfaceFactory()
+        adapter = factory.gerar_interface(tipo_grafico)
+        pipeline = [
+            {
+                '$group': {
+                    '_id': '$CAUSA_BASICA',
+                    'count': {
+                        '$sum': 1
+                    }
+                }
+            },
+            {
+                '$sort': {
+                    'count': -1
+                }
+            },
+            {
+                '$limit': quantidade
+            }
+        ]
+        grafico = await adapter.gerar_grafico(ano, pipeline)
+        return grafico
