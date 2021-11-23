@@ -11,5 +11,20 @@ class ServicoDeclaracaoObito(metaclass=SingletonMeta):
     async def listar_declaracoes_ano(self, ano: str, tipo_grafico: str):
         factory = InterfaceFactory()
         adapter = factory.gerar_interface(tipo_grafico)
-        grafico = await adapter.gerar_grafico(ano)
+        pipeline = [
+            {
+                '$group': {
+                    '_id': '$MES_OBITO',
+                    'count': {
+                        '$sum': 1
+                    }
+                }
+            },
+            {
+                '$sort': {
+                    '_id': 1
+                }
+            }
+        ]
+        grafico = await adapter.gerar_grafico(ano, pipeline)
         return grafico
