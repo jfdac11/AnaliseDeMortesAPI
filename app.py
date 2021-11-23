@@ -25,7 +25,7 @@ async def listar_declaracoes_obito(ano: str, limite: int, pagina: int):
 
 
 @app.get(
-    "/NumDeclaracoesObitoMesais", response_description="Listar numero de declarações mensais"
+    "/NumDeclaracoesObitoMensais", response_description="Listar numero de declarações mensais"
 )
 async def num_declaracoes_obito(ano: str, tipo_grafico: str):
     servico_declaracao_obito = ServicoDeclaracaoObito()
