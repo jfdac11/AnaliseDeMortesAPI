@@ -1,6 +1,6 @@
+from factory.interface_factory import InterfaceFactory
 from singleton import SingletonMeta
 from config.conexao_bd import db
-from adapters.grafico_eixos_adapter import GraficoEixosAdapter
 
 
 class ServicoDeclaracaoObito(metaclass=SingletonMeta):
@@ -8,7 +8,8 @@ class ServicoDeclaracaoObito(metaclass=SingletonMeta):
         declaracoes_obito = await db[ano].find().skip(pagina).limit(limite).to_list(limite)
         return declaracoes_obito
 
-    async def listar_declaracoes_ano(self, ano: str):
-        adapter = GraficoEixosAdapter()
+    async def listar_declaracoes_ano(self, ano: str, tipo_grafico: str):
+        factory = InterfaceFactory()
+        adapter = factory.gerar_interface(tipo_grafico)
         grafico = await adapter.gerar_grafico(ano)
         return grafico
