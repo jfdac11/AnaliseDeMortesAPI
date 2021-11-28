@@ -10,7 +10,7 @@ class GraficoEixosAdapter(ListarDeclaracoes, IAdapter):
             eixo.append(item[chave])
         return eixo
 
-    async def gerar_grafico(self, ano: str, pipeline: list):
+    async def gerar_exibicao(self, ano: str, pipeline: list):
         eixos = []
         res_aggregate = await self.aggregate(ano, pipeline)
         chaves = res_aggregate[0].keys()

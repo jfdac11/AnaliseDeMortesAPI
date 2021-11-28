@@ -1,4 +1,4 @@
-from factory.interface_factory import InterfaceFactory
+from factory.exibicao_factory import ExibicaoAdapterFactory
 from singleton import SingletonMeta
 from config.conexao_bd import db
 
@@ -8,9 +8,9 @@ class ServicoDeclaracaoObito(metaclass=SingletonMeta):
         declaracoes_obito = await db[ano].find().skip(pagina).limit(limite).to_list(limite)
         return declaracoes_obito
 
-    async def listar_declaracoes_ano(self, ano: str, tipo_grafico: str):
-        factory = InterfaceFactory()
-        adapter = factory.gerar_interface(tipo_grafico)
+    async def listar_declaracoes_ano(self, ano: str, tipo_exibicao: str):
+        factory = ExibicaoAdapterFactory()
+        adapter = factory.gerar_exibicao_adapter(tipo_exibicao)
         pipeline = [
             {
                 '$group': {
@@ -26,12 +26,12 @@ class ServicoDeclaracaoObito(metaclass=SingletonMeta):
                 }
             }
         ]
-        grafico = await adapter.gerar_grafico(ano, pipeline)
-        return grafico
+        exibicao = await adapter.gerar_exibicao(ano, pipeline)
+        return exibicao
 
-    async def listar_doencas_letais(self, ano: str, quantidade: int, tipo_grafico: str):
-        factory = InterfaceFactory()
-        adapter = factory.gerar_interface(tipo_grafico)
+    async def listar_doencas_que_mais_mataram(self, ano: str, quantidade: int, tipo_exibicao: str):
+        factory = ExibicaoAdapterFactory()
+        adapter = factory.gerar_exibicao_adapter(tipo_exibicao)
         pipeline = [
             {
                 '$group': {
@@ -50,5 +50,5 @@ class ServicoDeclaracaoObito(metaclass=SingletonMeta):
                 '$limit': quantidade
             }
         ]
-        grafico = await adapter.gerar_grafico(ano, pipeline)
-        return grafico
+        exibicao = await adapter.gerar_exibicao(ano, pipeline)
+        return exibicao

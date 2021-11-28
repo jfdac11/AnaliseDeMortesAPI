@@ -27,16 +27,16 @@ async def listar_declaracoes_obito(ano: str, limite: int, pagina: int):
 @app.get(
     "/NumDeclaracoesObitoMensais", response_description="Listar numero de declarações mensais"
 )
-async def num_declaracoes_obito(ano: str, tipo_grafico: str):
+async def num_declaracoes_obito(ano: str, tipo_exibicao: str):
     servico_declaracao_obito = ServicoDeclaracaoObito()
-    num_declaracoes_obito = await servico_declaracao_obito.listar_declaracoes_ano(ano, tipo_grafico)
+    num_declaracoes_obito = await servico_declaracao_obito.listar_declaracoes_ano(ano, tipo_exibicao)
     return num_declaracoes_obito
 
 
 @app.get(
-    "/DoencasMaisLetais", response_description="Listar as doenças que mais mataram"
+    "/DoencasQueMaisMataram", response_description="Listar as doenças que mais mataram"
 )
-async def listar_doencas_letais(ano: str, quantidade: int, tipo_grafico: str):
+async def listar_doencas_que_mais_mataram(ano: str, quantidade: int, tipo_exibicao: str):
     servico_declaracao_obito = ServicoDeclaracaoObito()
-    doencas_letais = await servico_declaracao_obito.listar_doencas_letais(ano, quantidade, tipo_grafico)
+    doencas_letais = await servico_declaracao_obito.listar_doencas_que_mais_mataram(ano, quantidade, tipo_exibicao)
     return doencas_letais

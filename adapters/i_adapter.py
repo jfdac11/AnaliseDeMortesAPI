@@ -1,3 +1,3 @@
 class IAdapter:
-    async def gerar_grafico(self, ano: str, pipeline: list):
+    async def gerar_exibicao(self, ano: str, pipeline: list):
         pass

@@ -1,4 +1,3 @@
-from adapters.i_adapter import IAdapter
 from config.conexao_bd import db
 
 

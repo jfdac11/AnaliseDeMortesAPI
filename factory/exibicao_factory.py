@@ -4,13 +4,13 @@ from adapters.i_adapter import IAdapter
 from fastapi import HTTPException
 
 
-class InterfaceFactory:
+class ExibicaoAdapterFactory:
 
-    def gerar_interface(self, tipo_interface: str) -> IAdapter:
-        if tipo_interface == "GraficoEixos":
+    def gerar_exibicao_adapter(self, tipo_exibicao: str) -> IAdapter:
+        if tipo_exibicao == "GraficoEixos":
             return GraficoEixosAdapter()
-        elif tipo_interface == "GraficoPizza":
+        elif tipo_exibicao == "GraficoPizza":
             return GraficoPizzaAdapter()
         else:
             raise HTTPException(
-                status_code=400, detail="Não existe nenhum adaptador de interface chamado " + tipo_interface)
+                status_code=400, detail="Não existe nenhum adaptador de exibição chamado " + tipo_exibicao)
