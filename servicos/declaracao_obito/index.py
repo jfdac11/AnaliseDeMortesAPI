@@ -14,7 +14,7 @@ class ServicoDeclaracaoObito(metaclass=SingletonMeta):
         pipeline = [
             {
                 '$group': {
-                    '_id': '$MES_OBITO',
+                    '_id': '$mes_obito',
                     'count': {
                         '$sum': 1
                     }
@@ -35,7 +35,7 @@ class ServicoDeclaracaoObito(metaclass=SingletonMeta):
         pipeline = [
             {
                 '$group': {
-                    '_id': '$CAUSA_BASICA',
+                    '_id': '$cod_causa_basica',
                     'count': {
                         '$sum': 1
                     }
