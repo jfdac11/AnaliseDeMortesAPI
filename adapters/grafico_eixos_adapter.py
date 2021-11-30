@@ -11,10 +11,11 @@ class GraficoEixosAdapter(ListarDeclaracoes, IAdapter):
         return eixo
 
     async def gerar_exibicao(self, ano: str, pipeline: list):
-        eixos = []
+        eixos = {
+            "x": [],
+            "y": []
+        }
         res_aggregate = await self.aggregate(ano, pipeline)
-        chaves = res_aggregate[0].keys()
-        for chave in chaves:
-            eixo = self.gerar_eixo(res_aggregate, chave)
-            eixos.append(eixo)
+        eixos["x"] = self.gerar_eixo(res_aggregate, "_id")
+        eixos["y"] = self.gerar_eixo(res_aggregate, "count")
         return eixos
