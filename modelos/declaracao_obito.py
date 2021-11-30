@@ -8,7 +8,7 @@ class DeclaracaoObitoModel(BaseModel):
     id: PyObjectId = Field(default_factory=PyObjectId, alias="_id")
     idade: Optional[int] = Field(None)
     sexo: Optional[str] = Field(None)
-    mes_obito: Optional[str] = Field(None)
+    mes_obito: Optional[int] = Field(None)
     raca_cor: Optional[str] = Field(None)
     escolaridade: Optional[str] = Field(None)
     estado: Optional[str] = Field(None)
