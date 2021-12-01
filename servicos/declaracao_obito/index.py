@@ -73,3 +73,24 @@ class ServicoDeclaracaoObito(metaclass=SingletonMeta):
         ]
         exibicao = await adapter.gerar_exibicao(ano, pipeline)
         return exibicao
+
+    async def listar_mortes_por_raca_cor(self, ano: str, tipo_exibicao: str):
+        factory = ExibicaoAdapterFactory()
+        adapter = factory.gerar_exibicao_adapter(tipo_exibicao)
+        pipeline = [
+            {
+                '$group': {
+                    '_id': '$raca_cor',
+                    'count': {
+                        '$sum': 1
+                    }
+                }
+            },
+            {
+                '$sort': {
+                    'count': -1
+                }
+            }
+        ]
+        exibicao = await adapter.gerar_exibicao(ano, pipeline)
+        return exibicao

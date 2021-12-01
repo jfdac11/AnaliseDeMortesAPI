@@ -49,3 +49,12 @@ async def listar_mortes_por_estado(ano: str, tipo_exibicao: str):
     servico_declaracao_obito = ServicoDeclaracaoObito()
     mortes_estado = await servico_declaracao_obito.listar_mortes_por_estado(ano, tipo_exibicao)
     return mortes_estado
+
+
+@app.get(
+    "/MortesPorRacaCor", response_description="Listar a quantidade de mortes por raça ou cor"
+)
+async def listar_mortes_por_raca_cor(ano: str, tipo_exibicao: str):
+    servico_declaracao_obito = ServicoDeclaracaoObito()
+    mortes_raca_cor = await servico_declaracao_obito.listar_mortes_por_raca_cor(ano, tipo_exibicao)
+    return mortes_raca_cor
