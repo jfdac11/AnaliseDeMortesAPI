@@ -8,10 +8,34 @@ class ServicoDeclaracaoObito(metaclass=SingletonMeta):
         declaracoes_obito = await db[ano].find().skip(pagina).limit(limite).to_list(limite)
         return declaracoes_obito
 
-    async def listar_declaracoes_ano(self, ano: str, tipo_exibicao: str):
+    async def listar_declaracoes_ano(self, ano: str, tipo_exibicao: str, sexo: str, raca_cor: str, escolaridade: str, estado: str, capitulo_cb: str, idade_inf: int, idade_sup: int):
         factory = ExibicaoAdapterFactory()
         adapter = factory.gerar_exibicao_adapter(tipo_exibicao)
+
+        match = {}
+        if (sexo):
+            match["sexo"] = sexo
+        if (raca_cor):
+            match["raca_cor"] = raca_cor
+        if (escolaridade):
+            match["escolaridade"] = escolaridade
+        if (estado):
+            match["estado"] = estado
+        if (capitulo_cb):
+            match["cod_capitulo_causa_basica"] = capitulo_cb
+        if (idade_inf):
+            match["idade"] = {
+                '$gte': idade_inf
+            }
+        if (idade_sup):
+            match["idade"] = {
+                '$lte': idade_sup
+            }
+
         pipeline = [
+            {
+                '$match': match
+            },
             {
                 '$group': {
                     '_id': '$mes_obito',
