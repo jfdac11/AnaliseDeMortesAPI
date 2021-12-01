@@ -36,25 +36,25 @@ async def num_declaracoes_obito(ano: str, tipo_exibicao: str, sexo: str = None, 
 @app.get(
     "/DoencasQueMaisMataram", response_description="Listar as doenças que mais mataram"
 )
-async def listar_doencas_que_mais_mataram(ano: str, quantidade: int, tipo_exibicao: str):
+async def listar_doencas_que_mais_mataram(ano: str, quantidade: int, tipo_exibicao: str, sexo: str = None, raca_cor: str = None, escolaridade: str = None, estado: str = None, capitulo_cb: str = None, idade_inf: int = None, idade_sup: int = None, mes_obito_inf: int = None, mes_obito_sup: int = None):
     servico_declaracao_obito = ServicoDeclaracaoObito()
-    doencas_letais = await servico_declaracao_obito.listar_doencas_que_mais_mataram(ano, quantidade, tipo_exibicao)
+    doencas_letais = await servico_declaracao_obito.listar_doencas_que_mais_mataram(ano, quantidade, tipo_exibicao, sexo, raca_cor, escolaridade, estado, capitulo_cb, idade_inf, idade_sup, mes_obito_inf, mes_obito_sup)
     return doencas_letais
 
 
 @app.get(
     "/MortesPorEstado", response_description="Listar a quantidade de mortes por estado"
 )
-async def listar_mortes_por_estado(ano: str, tipo_exibicao: str):
+async def listar_mortes_por_estado(ano: str, tipo_exibicao: str, sexo: str = None, raca_cor: str = None, escolaridade: str = None, capitulo_cb: str = None, idade_inf: int = None, idade_sup: int = None, mes_obito_inf: int = None, mes_obito_sup: int = None):
     servico_declaracao_obito = ServicoDeclaracaoObito()
-    mortes_estado = await servico_declaracao_obito.listar_mortes_por_estado(ano, tipo_exibicao)
+    mortes_estado = await servico_declaracao_obito.listar_mortes_por_estado(ano, tipo_exibicao, sexo, raca_cor, escolaridade, capitulo_cb, idade_inf, idade_sup, mes_obito_inf, mes_obito_sup)
     return mortes_estado
 
 
 @app.get(
     "/MortesPorRacaCor", response_description="Listar a quantidade de mortes por raça ou cor"
 )
-async def listar_mortes_por_raca_cor(ano: str, tipo_exibicao: str):
+async def listar_mortes_por_raca_cor(ano: str, tipo_exibicao: str, sexo: str = None, escolaridade: str = None, estado: str = None, capitulo_cb: str = None, idade_inf: int = None, idade_sup: int = None, mes_obito_inf: int = None, mes_obito_sup: int = None):
     servico_declaracao_obito = ServicoDeclaracaoObito()
-    mortes_raca_cor = await servico_declaracao_obito.listar_mortes_por_raca_cor(ano, tipo_exibicao)
+    mortes_raca_cor = await servico_declaracao_obito.listar_mortes_por_raca_cor(ano, tipo_exibicao, sexo, escolaridade, estado, capitulo_cb, idade_inf, idade_sup, mes_obito_inf, mes_obito_sup)
     return mortes_raca_cor

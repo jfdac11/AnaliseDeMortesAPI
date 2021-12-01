@@ -13,8 +13,9 @@ class GraficoPizzaAdapter(ListarDeclaracoes, IAdapter):
     async def gerar_exibicao(self, ano: str, pipeline: list):
         eixos = []
         res_aggregate = await self.aggregate(ano, pipeline)
-        chaves = res_aggregate[0].keys()
-        for chave in chaves:
-            eixo = self.gerar_eixo(res_aggregate, chave)
-            eixos.append(eixo)
+        if(res_aggregate):
+            chaves = res_aggregate[0].keys()
+            for chave in chaves:
+                eixo = self.gerar_eixo(res_aggregate, chave)
+                eixos.append(eixo)
         return eixos
