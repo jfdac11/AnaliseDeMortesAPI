@@ -210,3 +210,55 @@ class ServicoDeclaracaoObito(metaclass=SingletonMeta):
         ]
         exibicao = await adapter.gerar_exibicao(ano, pipeline)
         return exibicao
+
+    async def diferenca_mortes(self):
+        factory = ExibicaoAdapterFactory()
+        adapter = factory.gerar_exibicao_adapter('GraficoPizza')
+
+        pipeline = [
+            {
+                '$group': {
+                    '_id': '$cod_grupo_causa_basica',
+                    'count': {
+                        '$sum': 1
+                    }
+                }
+            },
+            {
+                '$sort': {
+                    'count': 1
+                }
+            }
+        ]
+        cont = 0
+        maiordif = 0
+        melhorgrupo = ""
+        exibicao2020 = await adapter.gerar_exibicao('2020', pipeline)
+        exibicao2019 = await adapter.gerar_exibicao('2019', pipeline)
+        while cont < len(exibicao2020[0]):
+            doenca = exibicao2020[0][cont]
+            num2020 = exibicao2020[1][cont]
+            try:
+                index = exibicao2019[0].index(doenca)
+                if index and doenca != "Y35-Y36" and doenca != "B25-B34" and doenca != "V50-V59" and doenca != "H43-H45" and doenca != "V95-V97" and doenca != "H30-H36":
+                    maiornum = 0
+                    menornum = 0
+                    num2019 = exibicao2019[1][index]
+                    if num2020 > num2019:
+                        maiornum = num2020
+                        menornum = num2019
+                    else:
+                        maiornum = num2019
+                        menornum = num2020
+                    dif = maiornum - menornum
+                    percent = dif / menornum
+                    if percent > maiordif:
+                        maiordif = percent
+                        melhorgrupo = doenca
+            except:
+                print("acontece")
+            cont = cont + 1
+        return {
+            "grupo": melhorgrupo,
+            "dif": maiordif
+        }
