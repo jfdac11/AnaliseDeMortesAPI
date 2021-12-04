@@ -58,3 +58,12 @@ async def listar_mortes_por_raca_cor(ano: str, tipo_exibicao: str, sexo: str = N
     servico_declaracao_obito = ServicoDeclaracaoObito()
     mortes_raca_cor = await servico_declaracao_obito.listar_mortes_por_raca_cor(ano, tipo_exibicao, sexo, escolaridade, estado, capitulo_cb, idade_inf, idade_sup, mes_obito_inf, mes_obito_sup)
     return mortes_raca_cor
+
+
+@app.get(
+    "/DiferencaMortes", response_description="Procura as doenças com maior diferença nas taxas de mortalidade entre os anos de 2019 e 2020"
+)
+async def diferenca_mortes(quantidade: int):
+    servico_declaracao_obito = ServicoDeclaracaoObito()
+    doencas_diferentes = await servico_declaracao_obito.diferenca_mortes(quantidade)
+    return doencas_diferentes

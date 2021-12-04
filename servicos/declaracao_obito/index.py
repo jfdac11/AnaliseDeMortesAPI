@@ -210,3 +210,58 @@ class ServicoDeclaracaoObito(metaclass=SingletonMeta):
         ]
         exibicao = await adapter.gerar_exibicao(ano, pipeline)
         return exibicao
+
+    def encontrar_do(self, do_list, gp_causa_basica):
+        for do in do_list:
+            if do['_id'] == gp_causa_basica:
+                return do
+        return None
+
+    async def diferenca_mortes(self, quantidade: int):
+        pipeline = [
+            {
+                '$group': {
+                    '_id': '$cod_grupo_causa_basica',
+                    'count': {
+                        '$sum': 1
+                    }
+                }
+            },
+            {
+                '$sort': {
+                    'count': -1
+                }
+            },
+            {
+                '$limit': quantidade
+            }
+        ]
+
+        cont = 0
+        mortes_2020 = await db['2020'].aggregate(pipeline).to_list(quantidade)
+        mortes_2019 = await db['2019'].aggregate(pipeline).to_list(quantidade)
+
+        while cont < len(mortes_2020):
+            do_2020 = mortes_2020[cont]
+            gp_causa_basica = do_2020['_id']
+            qntd_mortes_2020 = do_2020['count']
+            do_2019 = self.encontrar_do(mortes_2019, gp_causa_basica)
+
+            if do_2019:
+                maior_num = 0
+                menor_num = 0
+                print(do_2019)
+                qntd_mortes_2019 = do_2019['count']
+                if qntd_mortes_2020 > qntd_mortes_2019:
+                    maior_num = qntd_mortes_2020
+                    menor_num = qntd_mortes_2019
+                else:
+                    maior_num = qntd_mortes_2019
+                    menor_num = qntd_mortes_2020
+                dif = maior_num - menor_num
+                percent = dif / menor_num
+                do_2020['qntd_mortes_2019'] = qntd_mortes_2019
+                do_2020['dif_percent'] = percent
+            cont = cont + 1
+            qntd_mortes_2019.sort()
+        return mortes_2020
