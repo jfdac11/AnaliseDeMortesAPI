@@ -211,10 +211,13 @@ class ServicoDeclaracaoObito(metaclass=SingletonMeta):
         exibicao = await adapter.gerar_exibicao(ano, pipeline)
         return exibicao
 
-    async def diferenca_mortes(self):
-        factory = ExibicaoAdapterFactory()
-        adapter = factory.gerar_exibicao_adapter('GraficoPizza')
+    def encontrar_do(self, do_list, gp_causa_basica):
+        for do in do_list:
+            if do['_id'] == gp_causa_basica:
+                return do
+        return None
 
+    async def diferenca_mortes(self, quantidade: int):
         pipeline = [
             {
                 '$group': {
@@ -226,39 +229,39 @@ class ServicoDeclaracaoObito(metaclass=SingletonMeta):
             },
             {
                 '$sort': {
-                    'count': 1
+                    'count': -1
                 }
+            },
+            {
+                '$limit': quantidade
             }
         ]
+
         cont = 0
-        maiordif = 0
-        melhorgrupo = ""
-        exibicao2020 = await adapter.gerar_exibicao('2020', pipeline)
-        exibicao2019 = await adapter.gerar_exibicao('2019', pipeline)
-        while cont < len(exibicao2020[0]):
-            doenca = exibicao2020[0][cont]
-            num2020 = exibicao2020[1][cont]
-            try:
-                index = exibicao2019[0].index(doenca)
-                if index and doenca != "Y35-Y36" and doenca != "B25-B34" and doenca != "V50-V59" and doenca != "H43-H45" and doenca != "V95-V97" and doenca != "H30-H36":
-                    maiornum = 0
-                    menornum = 0
-                    num2019 = exibicao2019[1][index]
-                    if num2020 > num2019:
-                        maiornum = num2020
-                        menornum = num2019
-                    else:
-                        maiornum = num2019
-                        menornum = num2020
-                    dif = maiornum - menornum
-                    percent = dif / menornum
-                    if percent > maiordif:
-                        maiordif = percent
-                        melhorgrupo = doenca
-            except:
-                print("acontece")
+        mortes_2020 = await db['2020'].aggregate(pipeline).to_list(quantidade)
+        mortes_2019 = await db['2019'].aggregate(pipeline).to_list(quantidade)
+
+        while cont < len(mortes_2020):
+            do_2020 = mortes_2020[cont]
+            gp_causa_basica = do_2020['_id']
+            qntd_mortes_2020 = do_2020['count']
+            do_2019 = self.encontrar_do(mortes_2019, gp_causa_basica)
+
+            if do_2019:
+                maior_num = 0
+                menor_num = 0
+                print(do_2019)
+                qntd_mortes_2019 = do_2019['count']
+                if qntd_mortes_2020 > qntd_mortes_2019:
+                    maior_num = qntd_mortes_2020
+                    menor_num = qntd_mortes_2019
+                else:
+                    maior_num = qntd_mortes_2019
+                    menor_num = qntd_mortes_2020
+                dif = maior_num - menor_num
+                percent = dif / menor_num
+                do_2020['qntd_mortes_2019'] = qntd_mortes_2019
+                do_2020['dif_percent'] = percent
             cont = cont + 1
-        return {
-            "grupo": melhorgrupo,
-            "dif": maiordif
-        }
+            qntd_mortes_2019.sort()
+        return mortes_2020
