@@ -250,7 +250,6 @@ class ServicoDeclaracaoObito(metaclass=SingletonMeta):
             if do_2019:
                 maior_num = 0
                 menor_num = 0
-                print(do_2019)
                 qntd_mortes_2019 = do_2019['count']
                 if qntd_mortes_2020 > qntd_mortes_2019:
                     maior_num = qntd_mortes_2020
@@ -263,5 +262,4 @@ class ServicoDeclaracaoObito(metaclass=SingletonMeta):
                 do_2020['qntd_mortes_2019'] = qntd_mortes_2019
                 do_2020['dif_percent'] = percent
             cont = cont + 1
-            qntd_mortes_2019.sort()
         return mortes_2020
